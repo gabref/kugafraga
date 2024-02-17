@@ -94,6 +94,7 @@ contract AirportsManager {
 		token.updateState(_newState, _airportCode);
 		uint256 endGas = gasleft();
 		debts[_tokenAddress][_airportCode] += (initGas - endGas);
+		console.log("Debt updated: ", debts[_tokenAddress][_airportCode]);
 	}
 
 	// BUG: Unreasonably expensive
@@ -103,6 +104,7 @@ contract AirportsManager {
 		address tokenAddress = factory.createToken(_tokenOwner, _route);
 		uint256 endGas = gasleft();
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
+		console.log("Debt set: ", debts[tokenAddress][_route[0]]);
 	}
 
 	function payBackDebt(address _tokenAddress) public view {
