@@ -9,14 +9,19 @@ import "./TokenFactory.sol";
 contract AirportsManager {
 	address public immutable owner;
 	string[] public airports;
+	address public factoryAddress;
 
 	struct AirportData {
 		uint256	balance;
 		uint256	margin;
-		uint256	debt;
+		uint256 debt;
 	}
 
+	// Dict of airports
 	mapping(string => AirportData) public airports_dict;
+
+	// Dict of customer addresses with debts
+	mapping(address => mapping(string => uint256)) debts;
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
 	event AirportAdded(
@@ -27,8 +32,9 @@ contract AirportsManager {
 		string airportCode
 	);
 
-	constructor(address _owner) {
+	constructor(address _owner, address _factoryAddress) {
 		owner = _owner;
+		factoryAddress = _factoryAddress;
 	}
 
 	modifier isOwner() {
@@ -87,19 +93,21 @@ contract AirportsManager {
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		token.updateState(_newState, _airportCode);
 		uint256 endGas = gasleft();
-		airports_dict[_airportCode].debt += (initGas - endGas); //  * tx.gasprice;
+		debts[_tokenAddress][_airportCode] += (initGas - endGas);
 	}
 
 	// BUG: Unreasonably expensive
-	function createToken(address _factoryAddress, address _tokenOwner, string[] memory _route) public {
+	function createToken(address _tokenOwner, string[] memory _route) public {
 		uint256 initGas = gasleft();
-		KGFGTokenFactory factory = KGFGTokenFactory(_factoryAddress);
-		factory.createToken(_tokenOwner, _route);
+		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
+		address tokenAddress = factory.createToken(_tokenOwner, _route);
 		uint256 endGas = gasleft();
-		airports_dict[_route[0]].debt += (initGas - endGas); //  * tx.gasprice;
+		debts[tokenAddress][_route[0]] += (initGas - endGas);
+	}
+
+	function payBackDebt(address _tokenAddress) public view {
+		console.log("debt: ", debts[_tokenAddress]["WMI"]);
 	}
 
 	receive() external payable {}
 }
-
-// 0.000191130056034759

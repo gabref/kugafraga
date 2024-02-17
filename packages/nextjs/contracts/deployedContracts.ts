@@ -7,13 +7,18 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     AirportsManager: {
-      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+      address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
       abi: [
         {
           inputs: [
             {
               internalType: "address",
               name: "_owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_factoryAddress",
               type: "address",
             },
           ],
@@ -121,11 +126,6 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_factoryAddress",
-              type: "address",
-            },
-            {
-              internalType: "address",
               name: "_tokenOwner",
               type: "address",
             },
@@ -138,6 +138,19 @@ const deployedContracts = {
           name: "createToken",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "factoryAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -210,7 +223,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
       abi: [
         {
           inputs: [
