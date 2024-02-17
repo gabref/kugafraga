@@ -42,4 +42,8 @@ contract KGFGTrackingToken {
 		string memory ret = string.concat(state, " at ");
 		return string.concat(ret, location);
 	}
+
+	function retrieveRoute() public view returns (string[] memory) {
+		return (route);
+	}
 }

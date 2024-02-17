@@ -14,7 +14,6 @@ contract AirportsManager {
 	struct AirportData {
 		uint256	balance;
 		uint256	margin;
-		uint256 debt;
 	}
 
 	// Dict of airports
@@ -50,7 +49,7 @@ contract AirportsManager {
 
 	function addAirport(string memory _airportCode, uint256 _amount, uint256 _percentage) public {
 		require (!airportExists(_airportCode), "Duplicate airport");
-		airports_dict[_airportCode] = AirportData(_amount, _percentage, 0);
+		airports_dict[_airportCode] = AirportData(_amount, _percentage);
 		airports.push(_airportCode);
 		emit AirportAdded(_airportCode);
 	}
@@ -107,8 +106,22 @@ contract AirportsManager {
 		console.log("Debt set: ", debts[tokenAddress][_route[0]]);
 	}
 
-	function payBackDebt(address _tokenAddress) public view {
-		console.log("debt: ", debts[_tokenAddress]["WMI"]);
+	function payBackDebt(address _tokenAddress) public payable {
+		uint256 totalDebt = calculateTotalDebt(_tokenAddress);
+		require(msg.value >= totalDebt, "The amount paid is not equal to the debt.");
+		console.log("total debt: ", totalDebt);
+		console.log("WMI debt: ", debts[_tokenAddress]["WMI"]);
+		console.log("JFK debt: ", debts[_tokenAddress]["JFK"]);
+	}
+
+	function calculateTotalDebt(address _tokenAddress) private view returns (uint256) {
+		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
+		string[] memory route = token.retrieveRoute();
+		uint256 totalDebt = 0;
+		for (uint256 i = 0; i < route.length; i++) {
+			totalDebt += debts[_tokenAddress][route[i]];
+		}
+		return (totalDebt);
 	}
 
 	receive() external payable {}

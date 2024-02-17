@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     AirportsManager: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
       abi: [
         {
           inputs: [
@@ -113,11 +113,6 @@ const deployedContracts = {
               name: "margin",
               type: "uint256",
             },
-            {
-              internalType: "uint256",
-              name: "debt",
-              type: "uint256",
-            },
           ],
           stateMutability: "view",
           type: "function",
@@ -176,7 +171,7 @@ const deployedContracts = {
           ],
           name: "payBackDebt",
           outputs: [],
-          stateMutability: "view",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -236,7 +231,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
       abi: [
         {
           inputs: [
