@@ -82,7 +82,7 @@ contract AirportsManager {
         return airports;
     }
 
-	function updateTokenState(string memory _airportCode, string memory _newState, address _tokenAddress) public payable {
+	function updateTokenState(string memory _airportCode, string memory _newState, address _tokenAddress) public {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		token.updateState(_newState, _airportCode);
@@ -91,7 +91,7 @@ contract AirportsManager {
 	}
 
 	// BUG: Unreasonably expensive
-	function createToken(address _factoryAddress, address _tokenOwner, string[] memory _route) public payable {
+	function createToken(address _factoryAddress, address _tokenOwner, string[] memory _route) public {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(_factoryAddress);
 		factory.createToken(_tokenOwner, _route);

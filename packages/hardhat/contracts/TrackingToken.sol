@@ -32,13 +32,14 @@ contract KGFGTrackingToken {
 		console.log("Owner: ", owner);
 		console.log("Origin: ", route[0]);
 		console.log("Symbol: ", symbol);
-		console.log("State: ", state);
+		console.log("State: ", retrieveState());
 		console.log("Location: ", location);
 		console.log("Created at: ", createdAt);
 		console.log("Last modified: ", lastModified);
 	}
 
 	function retrieveState() public view returns (string memory) {
-		return state;
+		string memory ret = string.concat(state, " at ");
+		return string.concat(ret, location);
 	}
 }
