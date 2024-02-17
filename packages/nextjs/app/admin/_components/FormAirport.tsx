@@ -11,9 +11,13 @@ export const FormNewAirport = () => {
 		return airportName !== '' && country !== '';
 	};
 
+
+
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		// Handle form submission here
+
 		console.log("Submitting airport:", { airportName, country });
 		setIsSubmitting(true);
 		setTimeout(() => {
