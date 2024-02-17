@@ -27,13 +27,20 @@ contract AirportsManager {
 		_;
 	}
 
-	function addAirport(string memory _airportCode) public isOwner {
+	function airportExists(string memory _airportCode) private view returns (bool) {
+		if (airports_dict[_airportCode] != 0)
+			return (true);
+		return (false);
+	}
+
+	function addAirport(string memory _airportCode) public {
+		require (!airportExists(_airportCode), "Duplicate airport");
 		airports_dict[_airportCode] = 1 ether;
 		airports.push(_airportCode);
 		emit AirportAdded(_airportCode);
 	}
 
-	function removeAirport(string memory _airportCode) public isOwner {
+	function removeAirport(string memory _airportCode) public {
 		uint256 airportIndex = findAirportIndex(_airportCode);
 		if (airportIndex == airports.length) revert();
 		airports_dict[_airportCode] = 0;
