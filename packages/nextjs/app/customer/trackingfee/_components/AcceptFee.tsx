@@ -1,9 +1,8 @@
 "use client"
 
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { parseEther } from "viem";
-import { ForwardPageButton } from "~~/components/ForwardPageButton";
+import { ModalRedirectButton } from "~~/components/ModalRedirectButton";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export const AcceptFee = () => {
@@ -28,20 +27,26 @@ export const AcceptFee = () => {
 		<>
 			{!showThanks ? (
 				<>
-					<input
-						type="text"
-						placeholder="Write your greeting"
-						className="input border border-primary"
-						onChange={e => setNewGreeting(e.target.value)}
-					/>
+					{/* <input */}
+					{/* 	type="text" */}
+					{/* 	placeholder="Write your greeting" */}
+					{/* 	className="input border border-primary" */}
+					{/* 	onChange={e => setNewGreeting(e.target.value)} */}
+					{/* /> */}
 					<button className="btn btn-primary" onClick={() => writeAsync()} disabled={isLoading}>
 						{isLoading ? <span className="loading loading-spinner loading-sm"></span> : <>Send</>}
 					</button>
 				</>
 			) : (
 				<>
-					<p>Thank you for choosing us!</p>
-					<ForwardPageButton to={'/customer/status'} innerText={'Go to Status Page'} />
+					{showThanks &&
+						<ModalRedirectButton
+							to='/customer/status'
+							btnText='Go to Status Page'
+							bodyText='You agreed to pay 0.01 ETH for the greeting. Thank you for choosing us!'
+							title='Thank you for choosing us!'
+						/>
+					}
 				</>
 			)}
 		</>
