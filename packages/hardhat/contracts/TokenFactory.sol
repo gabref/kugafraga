@@ -8,8 +8,8 @@ import "./TrackingToken.sol";
 contract KGFGTokenFactory {
     address[] public deployedTokens;
 
-    function createToken(address _owner, string memory _origin, string memory _destination) public {
-        address newToken = address(new KGFGTrackingToken(_owner, _origin, _destination));
+    function createToken(address _owner, string[] memory _route) public {
+        address newToken = address(new KGFGTrackingToken(_owner, _route));
         deployedTokens.push(newToken);
     }
 

@@ -1,71 +1,44 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
+import "hardhat/console.sol";
+
 contract KGFGTrackingToken {
     address public				owner;
-    string public				origin;
-    string public				destination;
+    string[] public				route;
     string public				symbol;
-    uint private					state;
+    string public				state;
+    string public				location;
 	uint public					lastModified;
 	uint public					createdAt;
-	
-	// struct FeeDetails {
-	// 	address	addr;
-	// 	uint256	value;
-	// }
 
-	// mapping(uint256 => FeeDetails) public fees;
-	// uint256[] public fees_result;
-
-    constructor(address _owner, string memory _origin, string memory _destination) {
+    constructor(address _owner, string[] memory _route) {
         owner = _owner;
-        origin = _origin;
-		destination = _destination;	
+        route = _route;
         symbol = "KGFGTT";
-		state = 0;
+		state = "checked-in";
+		location = route[0];
 		createdAt = block.timestamp;
 		lastModified = createdAt;
+		console.log("[*] Token deployed");
     }
 
-	function nextState() public {
-		// FeeDetails memory details = fees[state];
-		// details.addr = msg.sender;
-		// details.value = 10;
-		state = state + 1;
+	function updateState(string memory _newState, string memory _location) public {
+		state = _newState;
+		location = _location;
 		lastModified = block.timestamp;
-		// fees_result.push(state - 1);
-	}
 
-	function retrieveStateDescription() private view returns (string memory)
-	{
-		if (state == 0)
-			return " check-in";
-		else if (state == 1)
-			return " loading";
-		else if (state == 2)
-			return " unloading";
-		else if (state == 3)
-			return " ready to collect";
-		else
-			return "Collected";
+		console.log("[*] State changed");
+		console.log("Owner: ", owner);
+		console.log("Origin: ", route[0]);
+		console.log("Symbol: ", symbol);
+		console.log("State: ", state);
+		console.log("Location: ", location);
+		console.log("Created at: ", createdAt);
+		console.log("Last modified: ", lastModified);
 	}
 
 	function retrieveState() public view returns (string memory) {
-		if (state == 0 || state == 1)
-			return string.concat(origin, retrieveStateDescription());
-		else if (state == 2 || state == 3)
-			return string.concat(destination, retrieveStateDescription());
-		return retrieveStateDescription();
+		return state;
 	}
-
-	// function retrieveFees() public view returns (FeeDetails[] memory) {
-	// 	FeeDetails[] memory feesArray = new FeeDetails[](fees);
-
-	// 	for (uint256 i = 0; i < fees.length; i++) {
-	// 		feesArray[i] = fees[i];
-	// 	}
-
-	// 	return feesArray;
-	// }
 }
