@@ -130,7 +130,7 @@ contract AirportsManager {
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
 	}
 
-	function calculateTotalDebt(address _tokenAddress) private view returns (DebtData memory) {
+	function calculateTotalDebt(address _tokenAddress) public view returns (DebtData memory) {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		string[] memory route = token.retrieveRoute();
