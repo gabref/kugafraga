@@ -92,7 +92,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 		autoMine: true,
 	  });
 };
-  
 
 export default deployYourContract;
 

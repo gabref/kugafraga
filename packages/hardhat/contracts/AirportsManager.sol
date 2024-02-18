@@ -10,16 +10,24 @@ contract AirportsManager {
 	address public immutable owner;
 	string[] public airports;
 	address public factoryAddress;
+	uint256 private	margin = 30;
 
 	struct AirportData {
+		address payable airportAddress;
 		uint256	balance;
 		uint256	margin;
+	}
+
+	struct DebtData {
+		string[] route;
+		uint256 total;
+		uint256[] fees;
 	}
 
 	// Dict of airports
 	mapping(string => AirportData) public airports_dict;
 
-	// Dict of customer addresses with debts
+	// Dict of token addresses with debts
 	mapping(address => mapping(string => uint256)) debts;
 
 	// Events: a way to emit log statements from smart contract that can be listened to by external parties
@@ -36,6 +44,10 @@ contract AirportsManager {
 		factoryAddress = _factoryAddress;
 	}
 
+	function retrieveFactoryAddress() public view returns (address) {
+		return (factoryAddress);
+	}
+
 	modifier isOwner() {
 		require(msg.sender == owner, "Not the Owner");
 		_;
@@ -47,9 +59,9 @@ contract AirportsManager {
 		return (false);
 	}
 
-	function addAirport(string memory _airportCode, uint256 _amount, uint256 _percentage) public {
+	function addAirport(address payable _airportAddress, string memory _airportCode, uint256 _amount, uint256 _percentage) public {
 		require (!airportExists(_airportCode), "Duplicate airport");
-		airports_dict[_airportCode] = AirportData(_amount, _percentage);
+		airports_dict[_airportCode] = AirportData(_airportAddress, _amount, _percentage);
 		airports.push(_airportCode);
 		emit AirportAdded(_airportCode);
 	}
@@ -93,7 +105,6 @@ contract AirportsManager {
 		token.updateState(_newState, _airportCode);
 		uint256 endGas = gasleft();
 		debts[_tokenAddress][_airportCode] += (initGas - endGas);
-		console.log("Debt updated: ", debts[_tokenAddress][_airportCode]);
 	}
 
 	// BUG: Unreasonably expensive
@@ -103,26 +114,38 @@ contract AirportsManager {
 		address tokenAddress = factory.createToken(_tokenOwner, _route);
 		uint256 endGas = gasleft();
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
-		console.log("Debt set: ", debts[tokenAddress][_route[0]]);
+	}
+
+	function calculateTotalDebt(address _tokenAddress) private view returns (DebtData memory) {
+		uint256 initGas = gasleft();
+		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
+		string[] memory route = token.retrieveRoute();
+		uint256[] memory fees = new uint256[](route.length);
+		uint256 totalDebt = 0;
+		uint256 i = 0;
+		while (i < route.length) {
+			totalDebt += debts[_tokenAddress][route[i]];
+			fees[i] = debts[_tokenAddress][route[i]];
+			i++;
+		}
+		DebtData memory debtData = DebtData(route, (totalDebt + (initGas - gasleft())) * ((100 + margin) / 100), fees);
+		return (debtData);
 	}
 
 	function payBackDebt(address _tokenAddress) public payable {
-		uint256 totalDebt = calculateTotalDebt(_tokenAddress);
-		require(msg.value >= totalDebt, "The amount paid is not equal to the debt.");
-		console.log("total debt: ", totalDebt);
-		console.log("WMI debt: ", debts[_tokenAddress]["WMI"]);
-		console.log("JFK debt: ", debts[_tokenAddress]["JFK"]);
-	}
-
-	function calculateTotalDebt(address _tokenAddress) private view returns (uint256) {
-		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
-		string[] memory route = token.retrieveRoute();
-		uint256 totalDebt = 0;
-		for (uint256 i = 0; i < route.length; i++) {
-			totalDebt += debts[_tokenAddress][route[i]];
+		DebtData memory debtData = calculateTotalDebt(_tokenAddress);
+		console.log("Total debt: ", debtData.total * (10 ** 9));
+		require(msg.value >= (debtData.total * (10 ** 9)), "The amount is not equal to the total.");
+		for (uint256 i = 0; i < debtData.fees.length; i++) {
+			address payable apAddress = airports_dict[debtData.route[i]].airportAddress;
+			uint256 fee = debtData.fees[i] * (10 ** 9) * ((100 + airports_dict[debtData.route[i]].margin) / 100); // TEST
+			bool sent = apAddress.send(fee);
+        	require(sent, "Failed to send Ether");
+			console.log("Fee paid");
+			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
 		}
-		return (totalDebt);
-	}
+		console.log("Debt paid");
+	} 
 
 	receive() external payable {}
 }
