@@ -4,7 +4,7 @@ import Link from "next/link";
 export const ForwardPageButton = ({ to, innerText }: { to: string, innerText: string }) => {
 	return (
 		<Link href={to} passHref>
-			<button className="font-custom bg-transparent border-grey-200 text-white font-semibold py-2 px-4 rounded-full hover:bg-base-300 transition duration-300 ease-in-out">
+			<button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
 				{innerText}
 			</button>
 		</Link>
