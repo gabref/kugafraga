@@ -1,0 +1,25 @@
+specVersion: 0.0.4
+description: Greetings
+repository: https://github.com/scaffold-eth/se-2/packages/subgraph/
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: AirportsManager
+    network: localhost
+    source:
+      abi: AirportsManager
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: AirportsManager
+          file: AirportsManager/abis/localhost_AirportsManager.json
+      eventHandlers:
+        - event: TokenCreated(address,address)
+          handler: createToken
+      file: AirportsManager/AirportsManager.wasm

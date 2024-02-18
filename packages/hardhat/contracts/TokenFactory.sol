@@ -6,15 +6,15 @@ import "hardhat/console.sol";
 import "./TrackingToken.sol";
 
 contract KGFGTokenFactory {
-    address[] public deployedTokens;
+	mapping(address => address[]) deployedTokens;
 
     function createToken(address _owner, string[] memory _route) public returns (address) {
         address newToken = address(new KGFGTrackingToken(_owner, _route));
-        deployedTokens.push(newToken);
+        deployedTokens[_owner].push(newToken);
 		return (newToken);
     }
 
-    function getDeployedTokens() public view returns (address[] memory) {
-        return deployedTokens;
+    function getUserTokens(address _user) public view returns (address[] memory) {
+        return deployedTokens[_user];
     }
 }

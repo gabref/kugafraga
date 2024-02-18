@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     AirportsManager: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
       abi: [
         {
           inputs: [
@@ -53,6 +53,11 @@ const deployedContracts = {
         },
         {
           inputs: [
+            {
+              internalType: "address payable",
+              name: "_airportAddress",
+              type: "address",
+            },
             {
               internalType: "string",
               name: "_airportCode",
@@ -104,6 +109,11 @@ const deployedContracts = {
           name: "airports_dict",
           outputs: [
             {
+              internalType: "address payable",
+              name: "airportAddress",
+              type: "address",
+            },
+            {
               internalType: "uint256",
               name: "balance",
               type: "uint256",
@@ -121,9 +131,28 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
-              name: "_tokenOwner",
+              name: "",
               type: "address",
             },
+          ],
+          name: "checkpoints_dict",
+          outputs: [
+            {
+              internalType: "string",
+              name: "state",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "airportCode",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
             {
               internalType: "string[]",
               name: "_route",
@@ -201,17 +230,76 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "retrieveFactoryAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
-              internalType: "string",
-              name: "_airportCode",
-              type: "string",
+              internalType: "address",
+              name: "_userAddress",
+              type: "address",
             },
+          ],
+          name: "retrieveSendersTokens",
+          outputs: [
             {
-              internalType: "string",
-              name: "_newState",
-              type: "string",
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "string[]",
+                  name: "route",
+                  type: "string[]",
+                },
+                {
+                  internalType: "string",
+                  name: "symbol",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "state",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "lastModified",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "createdAt",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct TokenData[]",
+              name: "",
+              type: "tuple[]",
             },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
             {
               internalType: "address",
               name: "_tokenAddress",
@@ -231,7 +319,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
       abi: [
         {
           inputs: [
@@ -260,25 +348,12 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "deployedTokens",
-          outputs: [
-            {
               internalType: "address",
-              name: "",
+              name: "_user",
               type: "address",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getDeployedTokens",
+          name: "getUserTokens",
           outputs: [
             {
               internalType: "address[]",
