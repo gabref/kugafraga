@@ -3,6 +3,7 @@
 import { NextPage } from "next";
 import { FlightInfo } from "../trackingfee/_components/FlightInformation";
 import { useEffect, useState } from "react";
+import QRCode from "react-qr-code";
 
 const StatusPage: NextPage = () => {
 	const [isLoadingStatus, setIsLoadingStatus] = useState(true);
@@ -44,6 +45,7 @@ const StatusPage: NextPage = () => {
 						(
 							<>
 								<h1 className="text-3xl font-bold text-center mt-8 mb-4">Track Luggage Status</h1>
+								<QRCode value={flightInfo.flightNumber} className='mb-6' />
 								<div className="shadow-md rounded-md p-6">
 									<h2 className="text-xl font-bold mb-4">Flight Information</h2>
 									<p><span className="font-semibold">Flight Number:</span> {flightInfo.flightNumber}</p>
