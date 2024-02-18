@@ -63,3 +63,11 @@ yarn start
 ```
 
 Visit our app at `http://localhost:3000`
+
+## ARBITRUM SEPOLIA TEST NET
+➜  kugafraga git:(dev-customer) ✗ yarn deploy --network arbitrumSepolia
+Nothing to compile
+No need to generate any newer typings.
+deploying "KGFGTokenFactory" (tx: 0xf4ae857b323b62163d46d6c8b1ceb57fb494ee88ecdfb59aa747b22fa3d168dd)...: deployed at 0x1b29364cc4CC3d866AC6f3cb3eA9a84987e00690 with 26844351 gas
+deploying "AirportsManager" (tx: 0x7694f7ba2292f8e753db711b2d86fca18c7310b349a7ee20baff39bc2425f08b)...: deployed at 0x39ecdeb11AF501E87e7dA698C87396e50E5a2b3f with 36293744 gas
+📝 Updated TypeScript contract definition file on ../nextjs/contracts/deployedContracts.ts

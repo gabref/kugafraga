@@ -430,7 +430,7 @@ const deployedContracts = {
   },
   421614: {
     AirportsManager: {
-      address: "0x2BB8B93F585B43b06F3d523bf30C203d3B6d4BD4",
+      address: "0x39ecdeb11AF501E87e7dA698C87396e50E5a2b3f",
       abi: [
         {
           inputs: [
@@ -734,6 +734,11 @@ const deployedContracts = {
               components: [
                 {
                   internalType: "address",
+                  name: "tokenAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
                   name: "owner",
                   type: "address",
                 },
@@ -797,7 +802,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x7A28cf37763279F774916b85b5ef8b64AB421f79",
+      address: "0x1b29364cc4CC3d866AC6f3cb3eA9a84987e00690",
       abi: [
         {
           inputs: [
