@@ -51,6 +51,9 @@ const Customer: NextPage = () => {
 							<div>
 								<ForwardPageButton innerText={'Check the Status of your Luggages'} to={'customer/luggages'} />
 							</div>
+							<div>
+								<ForwardPageButton innerText={'Pay Debt'} to={'customer/paydebt'} />
+							</div>
 						</div>
 					) : (
 						<ConnectButton />

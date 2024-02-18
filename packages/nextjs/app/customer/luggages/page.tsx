@@ -24,7 +24,7 @@ const LuggagesListPage: NextPage = () => {
 						{tokensInfo ? tokensInfo?.map((token, index) => (
 							<LuggageCard
 								key={index}
-								token={token.owner}
+								token={token.tokenAddress}
 								luggageStatus={token.state}
 								airports={token.route} />
 						)) : (

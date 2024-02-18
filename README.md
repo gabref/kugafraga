@@ -1,80 +1,73 @@
-# 🏗 Scaffold-ETH 2
+# TRACK my BAGS
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+Track My Bags is a luggage tracking app designed to simplify and improve the travel experience. With this app, users can monitor the location and status of their luggage in real time throughout their journey. Using advanced technologies, the app provides timely updates on luggage movements, reducing stress and providing peace of mind to travellers.
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+## Main features
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+- Real-Time Tracking: View the exact location of your luggage during the journey.
+- Travel History: Access a complete record of your past luggage movements.
+- Easy Configuration: Quickly connect your luggage to the app through an intuitive configuration process.
+- Intuitive User Interface: A clear and intuitive user interface for easy navigation and use.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+Facilitate your next trip with Track My Bags, ensuring that you are always in control of your belongings at every stage of your itinerary.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+![image whatever](./assets/roadmap.jpeg)
+
+## Technologies imployed
+
+Scaffold: frontend with nextjs and the rich components and hooks by scaffold and wagmi, buildted by buidGuild
+HardHat: Great backend for blockchain application, it makes the testing and developer experience an ease
 
 ## Requirements
+---
+Before going through with the installation, you will need:
+- Node (>= v18.17)
+- Yarn (v1 or v2+)
+- Git
 
-Before you begin, you need to install the following tools:
-
-- [Node (>= v18.17)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
-
-## Quickstart
-
-To get started with Scaffold-ETH 2, follow the steps below:
-
-1. Clone this repo & install dependencies
+## Quick Start
+---
+To get started with TRACK MY BAGS follow the steps below:
+1. Clone the repo && install dependencies:
 
 ```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
+bash
+git clone https://github.com/gabref/kugafraga.git
+cd kugafraga/scaffold-eth-2
 yarn install
 ```
 
-2. Run a local network in the first terminal:
+
+
+2. Run a local network on a first terminal:
 
 ```
+bash
 yarn chain
 ```
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.ts`.
 
-3. On a second terminal, deploy the test contract:
 
+3. On a second terminal deploy the test contract:
 ```
+bash
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
 
-4. On a third terminal, start your NextJS app:
+4. On a third terminal start our Next.js app:
 
 ```
+bash
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Visit our app at `http://localhost:3000`
 
-Run smart contract test with `yarn hardhat:test`
-
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend in `packages/nextjs/pages`
-- Edit your deployment scripts in `packages/hardhat/deploy`
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+## ARBITRUM SEPOLIA TEST NET
+➜  kugafraga git:(dev-customer) ✗ yarn deploy --network arbitrumSepolia
+Nothing to compile
+No need to generate any newer typings.
+deploying "KGFGTokenFactory" (tx: 0xf4ae857b323b62163d46d6c8b1ceb57fb494ee88ecdfb59aa747b22fa3d168dd)...: deployed at 0x1b29364cc4CC3d866AC6f3cb3eA9a84987e00690 with 26844351 gas
+deploying "AirportsManager" (tx: 0x7694f7ba2292f8e753db711b2d86fca18c7310b349a7ee20baff39bc2425f08b)...: deployed at 0x39ecdeb11AF501E87e7dA698C87396e50E5a2b3f with 36293744 gas
+📝 Updated TypeScript contract definition file on ../nextjs/contracts/deployedContracts.ts
