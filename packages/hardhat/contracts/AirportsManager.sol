@@ -10,7 +10,12 @@ contract AirportsManager {
 	address public immutable owner;
 	string[] public airports;
 	address public factoryAddress;
-	uint256 private	margin = 30;
+	uint256 private	margin = 50;
+
+	struct CheckpointData {
+		string state;
+		string airportCode;
+	}
 
 	struct AirportData {
 		address payable airportAddress;
@@ -26,6 +31,9 @@ contract AirportsManager {
 
 	// Dict of airports
 	mapping(string => AirportData) public airports_dict;
+
+	// Dict of checkpoints
+	mapping(address => CheckpointData) public checkpoints_dict;
 
 	// Dict of token addresses with debts
 	mapping(address => mapping(string => uint256)) debts;
@@ -99,15 +107,14 @@ contract AirportsManager {
         return airports;
     }
 
-	function updateTokenState(string memory _airportCode, string memory _newState, address _tokenAddress) public {
+	function updateTokenState(address _tokenAddress) public {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
-		token.updateState(_newState, _airportCode);
+		token.updateState(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode);
 		uint256 endGas = gasleft();
-		debts[_tokenAddress][_airportCode] += (initGas - endGas);
+		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
 	}
 
-	// BUG: Unreasonably expensive
 	function createToken(address _tokenOwner, string[] memory _route) public {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
@@ -135,16 +142,18 @@ contract AirportsManager {
 	function payBackDebt(address _tokenAddress) public payable {
 		DebtData memory debtData = calculateTotalDebt(_tokenAddress);
 		console.log("Total debt: ", debtData.total * (10 ** 9));
-		require(msg.value >= (debtData.total * (10 ** 9)), "The amount is not equal to the total.");
+		uint256 totalDebt = debtData.total * (10 ** 9);
+		require(msg.value >= (debtData.total * (10 ** 9)), "The amount is not equal to the total."); // TODO: Change to "=="
 		for (uint256 i = 0; i < debtData.fees.length; i++) {
 			address payable apAddress = airports_dict[debtData.route[i]].airportAddress;
 			uint256 fee = debtData.fees[i] * (10 ** 9) * ((100 + airports_dict[debtData.route[i]].margin) / 100); // TEST
+			totalDebt -= fee;
 			bool sent = apAddress.send(fee);
         	require(sent, "Failed to send Ether");
-			console.log("Fee paid");
+			console.log("Airport: ", debtData.route[i], " earned: ", fee);
 			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
 		}
-		console.log("Debt paid");
+		console.log("Smart contract earned: ", totalDebt);
 	} 
 
 	receive() external payable {}
