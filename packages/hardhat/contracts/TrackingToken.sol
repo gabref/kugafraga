@@ -12,6 +12,21 @@ contract KGFGTrackingToken {
 	uint public					lastModified;
 	uint public					createdAt;
 
+	event TokenStateUpdated(
+		string newState,
+		string newLocation
+	);
+
+	event TokenCreated(
+		address _tokenAddress,
+		address _ownerAddress,
+		string	_symbol,
+		string	_state,
+		string	_location,
+		uint	_lastModified,
+		uint	_createdAt
+	);
+
     constructor(address _owner, string[] memory _route) {
         owner = _owner;
         route = _route;
@@ -21,9 +36,11 @@ contract KGFGTrackingToken {
 		createdAt = block.timestamp;
 		lastModified = createdAt;
 		console.log("[*] Token deployed");
+
+		emit TokenCreated(address(this), _owner, symbol, state, location, lastModified, createdAt);
     }
 
-	function updateState(string memory _newState, string memory _location) public {
+	function updateState(string memory _newState, string memory _location) external {
 		state = _newState;
 		location = _location;
 		lastModified = block.timestamp;
@@ -36,6 +53,8 @@ contract KGFGTrackingToken {
 		console.log("Location: ", location);
 		console.log("Created at: ", createdAt);
 		console.log("Last modified: ", lastModified);
+
+		emit TokenStateUpdated(_newState, _location);
 	}
 
 	function retrieveState() public view returns (string memory) {
@@ -45,5 +64,9 @@ contract KGFGTrackingToken {
 
 	function retrieveRoute() public view returns (string[] memory) {
 		return (route);
+	}
+	
+	function retrieveTokenData() public view returns (address, string memory, string memory, string memory, uint, uint) {
+		return (owner, symbol, state, location, lastModified, createdAt);
 	}
 }

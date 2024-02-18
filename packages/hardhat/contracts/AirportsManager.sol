@@ -47,17 +47,6 @@ contract AirportsManager {
 		string airportCode
 	);
 
-	event TokenStateUpdated(
-		string _newState,
-		string _location,
-		address _employee
-	);
-
-	event TokenCreated(
-		address _tokenAddress,
-		address _ownerAddress
-	);
-
 	constructor(address _owner, address _factoryAddress) {
 		owner = _owner;
 		factoryAddress = _factoryAddress;
@@ -118,22 +107,20 @@ contract AirportsManager {
         return airports;
     }
 
-	function updateTokenState(address _tokenAddress) external {
+	function updateTokenState(address _tokenAddress) public {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		token.updateState(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode);
 		uint256 endGas = gasleft();
 		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
-		emit TokenStateUpdated(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode, msg.sender);
 	}
 
-	function createToken(address _tokenOwner, string[] memory _route) external {
+	function createToken(string[] memory _route) public {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
-		address tokenAddress = factory.createToken(_tokenOwner, _route);
+		address tokenAddress = factory.createToken(msg.sender, _route);
 		uint256 endGas = gasleft();
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
-		emit TokenCreated(tokenAddress, _tokenOwner);
 	}
 
 	function calculateTotalDebt(address _tokenAddress) private view returns (DebtData memory) {
@@ -167,7 +154,18 @@ contract AirportsManager {
 			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
 		}
 		console.log("Smart contract earned: ", totalDebt);
-	} 
+	}
+
+	function retrieveSendersTokens() public view returns (address[] memory) {
+		KGFGTokenFactory tokenFactory = KGFGTokenFactory(factoryAddress);
+		address[] memory userTokens = tokenFactory.getUserTokens(msg.sender);
+		return (userTokens);
+	}
+	
+	function getTokenData(address _tokenAddress) public view returns (address, string memory, string memory, string memory, uint, uint) {
+		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
+		return (token.retrieveTokenData());
+	}
 
 	receive() external payable {}
 }
