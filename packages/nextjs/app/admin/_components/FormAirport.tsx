@@ -17,7 +17,7 @@ export const FormNewAirport = () => {
 	const { writeAsync, isLoading } = useScaffoldContractWrite({
 		contractName: "AirportsManager",
 		functionName: "addAirport",
-		args: [airportAddress.trim(), airportCode, amount, percentage],
+		args: [airportAddress.trim(), airportCode.trim(), amount, percentage],
 		onBlockConfirmation: txnReceipt => {
 			console.log("📦 Transaction blockHash", txnReceipt.blockHash);
 			// once the transaction has confirmed, show the thank you message after a delay
