@@ -12,6 +12,11 @@ contract AirportsManager {
 	address public factoryAddress;
 	uint256 private	margin = 50;
 
+	struct CheckpointData {
+		string state;
+		string airportCode;
+	}
+
 	struct AirportData {
 		address payable airportAddress;
 		uint256	balance;
@@ -26,6 +31,9 @@ contract AirportsManager {
 
 	// Dict of airports
 	mapping(string => AirportData) public airports_dict;
+
+	// Dict of checkpoints
+	mapping(address => CheckpointData) public checkpoints_dict;
 
 	// Dict of token addresses with debts
 	mapping(address => mapping(string => uint256)) debts;
@@ -99,14 +107,14 @@ contract AirportsManager {
         return airports;
     }
 
-	function updateTokenState(string memory _airportCode, string memory _newState, address _tokenAddress) public {
+	function updateTokenState(address _tokenAddress) public {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
-		token.updateState(_newState, _airportCode);
+		token.updateState(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode);
 		uint256 endGas = gasleft();
-		debts[_tokenAddress][_airportCode] += (initGas - endGas);
+		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
 	}
-	
+
 	function createToken(address _tokenOwner, string[] memory _route) public {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
