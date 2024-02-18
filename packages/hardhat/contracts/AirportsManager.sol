@@ -151,10 +151,8 @@ contract AirportsManager {
 			totalDebt -= fee;
 			bool sent = apAddress.send(fee);
         	require(sent, "Failed to send Ether");
-			console.log("Airport: ", debtData.route[i], " earned: ", fee);
-			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
+			debts[_tokenAddress][debtData.route[i]] = 0;
 		}
-		console.log("Smart contract earned: ", totalDebt);
 	}
 
 	function retrieveSendersTokens(address _userAddress) public view returns (TokenData[] memory) {

@@ -2,7 +2,7 @@ export const GenericButton = ({ text, onClick }: {text: string, onClick?: () => 
 	return (
 		<button
 			onClick={onClick}
-			className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out"
+			className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
 		>
 			{ text }
 		</button>
