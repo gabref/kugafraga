@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     AirportsManager: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
       abi: [
         {
           inputs: [
@@ -49,50 +49,6 @@ const deployedContracts = {
             },
           ],
           name: "AirportRemoved",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "address",
-              name: "_tokenAddress",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "_ownerAddress",
-              type: "address",
-            },
-          ],
-          name: "TokenCreated",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "string",
-              name: "_newState",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "_location",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "_employee",
-              type: "address",
-            },
-          ],
-          name: "TokenStateUpdated",
           type: "event",
         },
         {
@@ -198,11 +154,6 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "_tokenOwner",
-              type: "address",
-            },
-            {
               internalType: "string[]",
               name: "_route",
               type: "string[]",
@@ -295,6 +246,62 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "_userAddress",
+              type: "address",
+            },
+          ],
+          name: "retrieveSendersTokens",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "string[]",
+                  name: "route",
+                  type: "string[]",
+                },
+                {
+                  internalType: "string",
+                  name: "symbol",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "state",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "lastModified",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "createdAt",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct TokenData[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
               name: "_tokenAddress",
               type: "address",
             },
@@ -312,7 +319,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
       abi: [
         {
           inputs: [
@@ -341,25 +348,12 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "deployedTokens",
-          outputs: [
-            {
               internalType: "address",
-              name: "",
+              name: "_user",
               type: "address",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getDeployedTokens",
+          name: "getUserTokens",
           outputs: [
             {
               internalType: "address[]",
