@@ -206,6 +206,25 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "uint256",
+              name: "_range",
+              type: "uint256",
+            },
+          ],
+          name: "random",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "string",
               name: "_airportCode",
               type: "string",
@@ -319,7 +338,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
       abi: [
         {
           inputs: [
