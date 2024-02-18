@@ -311,6 +311,11 @@ const deployedContracts = {
               components: [
                 {
                   internalType: "address",
+                  name: "tokenAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
                   name: "owner",
                   type: "address",
                 },

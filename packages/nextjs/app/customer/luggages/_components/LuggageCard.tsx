@@ -8,7 +8,6 @@ export const LuggageCard = ({ airports, luggageStatus, token }:
 				<h2 className="text-xl font-bold">Luggage Status</h2>
 			</div>
 			{token && (
-
 				<div className='bg-white '>
 				<QRCode value={token} size={250} className="p-3 mb-4" />
 				</div>
