@@ -1,14 +1,14 @@
 specVersion: 0.0.4
-description: KGFGTrackingToken
+description: Greetings
 repository: https://github.com/scaffold-eth/se-2/packages/subgraph/
 schema:
-  file: ./src/schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: KGFGTrackingToken
+    name: AirportsManager
     network: localhost
     source:
-      abi: KGFGTrackingToken
+      abi: AirportsManager
       address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
     mapping:
       kind: ethereum/events
@@ -17,9 +17,9 @@ dataSources:
       entities:
         - Token
       abis:
-        - name: KGFGTrackingToken
-          file: ./abis/localhost_AirportsManager.json
+        - name: AirportsManager
+          file: AirportsManager/abis/localhost_AirportsManager.json
       eventHandlers:
-        - event: TokenCreated(address,address,string,string,string,uint,uint)
-          handler: constructor
-      file: ./src/mapping.ts
+        - event: TokenCreated(address,address)
+          handler: createToken
+      file: AirportsManager/AirportsManager.wasm
