@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     AirportsManager: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [
@@ -53,6 +53,11 @@ const deployedContracts = {
         },
         {
           inputs: [
+            {
+              internalType: "address payable",
+              name: "_airportAddress",
+              type: "address",
+            },
             {
               internalType: "string",
               name: "_airportCode",
@@ -104,6 +109,11 @@ const deployedContracts = {
           name: "airports_dict",
           outputs: [
             {
+              internalType: "address payable",
+              name: "airportAddress",
+              type: "address",
+            },
+            {
               internalType: "uint256",
               name: "balance",
               type: "uint256",
@@ -112,6 +122,30 @@ const deployedContracts = {
               internalType: "uint256",
               name: "margin",
               type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "checkpoints_dict",
+          outputs: [
+            {
+              internalType: "string",
+              name: "state",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "airportCode",
+              type: "string",
             },
           ],
           stateMutability: "view",
@@ -201,17 +235,20 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "retrieveFactoryAddress",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
-            {
-              internalType: "string",
-              name: "_airportCode",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "_newState",
-              type: "string",
-            },
             {
               internalType: "address",
               name: "_tokenAddress",
@@ -231,7 +268,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [
