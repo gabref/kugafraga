@@ -4,40 +4,39 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { GenericButton } from "~~/components/GenericButton";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const CheckPoint: NextPage = () => {
 	const [scanning, setScanning] = useState(false);
 	const [qrData, setQrData] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
-	const [isLoadingApiCall, setIsLoadingApiCall] = useState(false);
 
 	if (error) {
 		return <div>{error}</div>;
 	}
 
+	const { writeAsync, isLoading } = useScaffoldContractWrite({
+		contractName: "AirportsManager",
+		functionName: "updateTokenState",
+		args: [qrData?.trim()],
+		onBlockConfirmation: txnReceipt => {
+			console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+			// once the transaction has confirmed, show the thank you message after a delay
+			// setTimeout(() => {
+			// 	setShowThanks(true);
+			// }, 2000); // 2 seconds
+		},
+	});
+
+
 	const handleApiCall = async () => {
 		try {
-			setIsLoadingApiCall(true);
 			console.log('qrData', qrData);
-
-			// Make API call with qrData
-			// Example:
-			// const response = await fetch('your-api-endpoint', {
-			//   method: 'POST',
-			//   body: JSON.stringify({ qrData }),
-			//   headers: {
-			//     'Content-Type': 'application/json'
-			//   }
-			// });
-			// Process the response
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-
-			setIsLoadingApiCall(false);
+			writeAsync();
 			setQrData(null);
 		} catch (error) {
 			console.error("Error:", error);
 			setError("Failed to make API call");
-			setIsLoadingApiCall(false);
 		}
 	};
 
@@ -67,7 +66,7 @@ const CheckPoint: NextPage = () => {
 					/>
 				</div>
 			)}
-			{(isLoadingApiCall && qrData && !scanning) ? (
+			{(isLoading && qrData && !scanning) ? (
 				<>
 					<p>Info Read: {qrData}</p>
 					<p>Loading....</p>

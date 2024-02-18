@@ -49,7 +49,7 @@ const Customer: NextPage = () => {
 								<ForwardPageButton innerText={'Subscribe to Tracking'} to={'customer/trackingfee'} />
 							</div>
 							<div>
-								<ForwardPageButton innerText={'Check the Status of your Luggage'} to={'customer/status'} />
+								<ForwardPageButton innerText={'Check the Status of your Luggages'} to={'customer/luggages'} />
 							</div>
 						</div>
 					) : (

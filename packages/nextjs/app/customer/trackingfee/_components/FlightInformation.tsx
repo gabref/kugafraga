@@ -78,7 +78,7 @@ export const FlightInformation = () => {
 							))}
 						</ul>
 						<p className="font-semibold" key='total-fee'>Total Fee: ${totalFee.toFixed(2)}</p>
-						<AcceptFee />
+						<AcceptFee airports={flightInfo.airports} />
 						<GenericButton
 							text="Delete Flight Info - This is just for debug purposes, delete later"
 							onClick={deleteFlightInfoFromStorage} />
