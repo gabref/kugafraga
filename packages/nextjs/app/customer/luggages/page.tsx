@@ -25,7 +25,7 @@ const LuggagesListPage: NextPage = () => {
 							<LuggageCard
 								key={index}
 								token={token.owner}
-								luggageStatus={token.state}
+								luggageStatus={token.tokenAddress}
 								airports={token.route} />
 						)) : (
 							<p className="text-center text-blue-500 font-bold mt-4">No luggage found</p>
