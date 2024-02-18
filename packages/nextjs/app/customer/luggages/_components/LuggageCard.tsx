@@ -7,7 +7,12 @@ export const LuggageCard = ({ airports, luggageStatus, token }:
 			<div className="flex justify-between items-center mb-4">
 				<h2 className="text-xl font-bold">Luggage Status</h2>
 			</div>
-			{token && <QRCode value={token} size={200} className="mb-4" />}
+			{token && (
+
+				<div className='bg-white '>
+				<QRCode value={token} size={250} className="p-3 mb-4" />
+				</div>
+			)}
 			<span className={`px-3 py-1 rounded-full text-sm ${luggageStatus === 'Onboard Flight' ? 'bg-primary text-white' : 'bg-secondary text-white'}`}>{luggageStatus}</span>
 			<div className="mb-4">
 				<p className="font-semibold">Departure Airport:</p>
