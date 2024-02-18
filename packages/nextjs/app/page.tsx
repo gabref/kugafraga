@@ -9,10 +9,10 @@ import { ForwardPageButton } from "~~/components/ForwardPageButton";
 
 const Home: NextPage = () => {
   return (
-    <>
+    <div className="flex flex-col place-items-center">
 		<ForwardPageButton to="/customer" innerText="Customer" />
 		<ForwardPageButton to="/checkpoint" innerText="Check Point" />
-    </>
+    </div>
   );
 };
 
