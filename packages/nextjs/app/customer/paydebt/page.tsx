@@ -1,13 +1,16 @@
 "use client";
 
+import { ethers } from "ethers";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
+import { parseEther } from "viem";
 import { GenericButton } from "~~/components/GenericButton";
-import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const CheckPoint: NextPage = () => {
 	const [scanning, setScanning] = useState(false);
+	const [etherDebt, setEtherDebt] = useState<string | null>(null);
 	const [qrData, setQrData] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +20,9 @@ const CheckPoint: NextPage = () => {
 
 	const { writeAsync, isLoading } = useScaffoldContractWrite({
 		contractName: "AirportsManager",
-		functionName: "updateTokenState",
+		functionName: "payBackDebt",
 		args: [qrData?.trim()],
+		value: parseEther(etherDebt || "0"),
 		onBlockConfirmation: txnReceipt => {
 			console.log("📦 Transaction blockHash", txnReceipt.blockHash);
 			// once the transaction has confirmed, show the thank you message after a delay
@@ -28,26 +32,25 @@ const CheckPoint: NextPage = () => {
 		},
 	});
 
-	const { 
-		writeAsync: writeAsyncCalculateTotalDebt,
-		isLoading: isLoadingDebt } = useScaffoldContractWrite({
+	const { data: debtData, isLoading: isLoadingDebt } = useScaffoldContractRead({
 		contractName: "AirportsManager",
-		functionName: "updateTokenState",
+		functionName: "calculateTotalDebt",
 		args: [qrData?.trim()],
-		onBlockConfirmation: txnReceipt => {
-			console.log("📦 Transaction blockHash", txnReceipt.blockHash);
-			// once the transaction has confirmed, show the thank you message after a delay
-			// setTimeout(() => {
-			// 	setShowThanks(true);
-			// }, 2000); // 2 seconds
-		},
+		watch: true,
 	});
 
 
 	const handleApiCall = async () => {
 		try {
 			console.log('qrData', qrData);
-			writeAsync();
+			if (debtData)
+			{
+				if (debtData.total > 0)
+				{
+					const debtInEther = ethers.formatEther(debtData.total * (10n ** 9n));
+					setEtherDebt(debtInEther);
+				}
+			}
 			setQrData(null);
 		} catch (error) {
 			console.error("Error:", error);
@@ -59,7 +62,10 @@ const CheckPoint: NextPage = () => {
 		if (qrData) {
 			handleApiCall();
 		}
-	}, [qrData]);
+		if (etherDebt) {
+			writeAsync();
+		}
+	}, [qrData, etherDebt]);
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -89,6 +95,8 @@ const CheckPoint: NextPage = () => {
 			) : (
 				<GenericButton onClick={() => setScanning(!scanning)} text={scanning ? 'Stop Scan' : 'Start Scan'} />
 			)}
+			{isLoadingDebt && <p>Loading Debt...</p>}
+			{etherDebt && <p>Debt: {etherDebt} ETH</p>}
 			{error && <p className="text-red-500 m-10">{error}</p>}
 		</div>
 	);
