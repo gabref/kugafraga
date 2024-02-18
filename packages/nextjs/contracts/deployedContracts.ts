@@ -132,33 +132,6 @@ const deployedContracts = {
             {
               internalType: "address",
               name: "",
-<<<<<<< HEAD
-              type: "address",
-            },
-          ],
-          name: "checkpoints_dict",
-          outputs: [
-            {
-              internalType: "string",
-              name: "state",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "airportCode",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_tokenOwner",
-=======
->>>>>>> dev
               type: "address",
             },
           ],
@@ -272,8 +245,6 @@ const deployedContracts = {
         {
           inputs: [
             {
-<<<<<<< HEAD
-=======
               internalType: "address",
               name: "_userAddress",
               type: "address",
@@ -330,7 +301,6 @@ const deployedContracts = {
         {
           inputs: [
             {
->>>>>>> dev
               internalType: "address",
               name: "_tokenAddress",
               type: "address",
@@ -349,11 +319,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
-<<<<<<< HEAD
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-=======
       address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
->>>>>>> dev
       abi: [
         {
           inputs: [
