@@ -1,64 +1,40 @@
 "use client";
 
 import { NextPage } from "next";
-import { FlightInfo } from "../trackingfee/_components/FlightInformation";
-import { useEffect, useState } from "react";
-import QRCode from "react-qr-code";
 import { LuggageCard } from "./_components/LuggageCard";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useAccount } from "wagmi";
 
-const StatusPage: NextPage = () => {
-	const [isLoadingStatus, setIsLoadingStatus] = useState(true);
-	const [flightInfo, setFlightInfo] = useState<FlightInfo[]>([]);
-	const [luggageStatus, setLuggageStatus] = useState<string[]>([]);
+const LuggagesListPage: NextPage = () => {
+	const { address: connectedAddress } = useAccount();
 
-	// THIS SHOULD DO THE QUERY TO SUBGRAPH TO GET THE LUGGAGE STATUS
-	const getLuggageStatus = async (): Promise<string[]> => {
-		// Simulate a delay and then return a random status
-		// if the status is null, it means that the luggage was not found
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		return ['Onboard Flight', 'Luggage Lost'];
-	};
-
-	// gets the flight info from local storage
-	// should take this also from the subgraph
-	function getFlightInfoFromStorage(): FlightInfo | null {
-		if (typeof window !== 'undefined') {
-			const fromLocalStorage = window.localStorage.getItem('flightInfoStorage')
-			if (fromLocalStorage === null || fromLocalStorage === undefined)
-				return null;
-			return JSON.parse(fromLocalStorage) as FlightInfo;
-		}
-		return null;
-	}
-
-	useEffect(() => {
-		getLuggageStatus()
-			.then(status => {
-				if (status === null) return;
-				setLuggageStatus(prev => [...prev, ...status]);
-				setIsLoadingStatus(false);
-			})
-			.catch(error => {
-				console.error("Error fetching luggage status:", error);
-				setIsLoadingStatus(false);
-			});
-
-		const flightInfo = getFlightInfoFromStorage();
-		if (!flightInfo) return;
-		setFlightInfo(prev => [...prev, flightInfo]);
-	}, []);
+	const { data: tokensInfo, isLoading: isLoadingTokens } = useScaffoldContractRead({
+		contractName: "AirportsManager",
+		functionName: "retrieveSendersTokens",
+		args: [connectedAddress],
+		watch: true,
+	})
 
 	return (
 		<div className="container mx-auto">
-			{isLoadingStatus ? <p className="text-center text-blue-500 font-bold mt-4">Loading...</p> : (
-				<>
-					{flightInfo.map((info, index) => (
-						<LuggageCard key={index} flightInfo={info} luggageStatus={luggageStatus[index]} />
-					))}
-				</>
+			{isLoadingTokens ? <p className="text-center text-blue-500 font-bold mt-4">Loading...</p> : (
+				<div className="flex flex-col items-center">
+					<h1 className="text-3xl font-bold text-center mt-4">Your Luggage</h1>
+					<div className="flex flex-wrap justify-center">
+						{tokensInfo ? tokensInfo?.map((token, index) => (
+							<LuggageCard
+								key={index}
+								token={token.owner}
+								luggageStatus={token.state}
+								airports={token.route} />
+						)) : (
+							<p className="text-center text-blue-500 font-bold mt-4">No luggage found</p>
+						)}
+					</div>
+				</div>
 			)}
-		</div>
+		</div >
 	);
 }
 
-export default StatusPage;
+export default LuggagesListPage;
