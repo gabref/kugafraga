@@ -9,27 +9,24 @@ import { ForwardPageButton } from "~~/components/ForwardPageButton";
 import { GenericButton } from "~~/components/GenericButton";
 import { Address } from "~~/components/scaffold-eth";
 import { FlightInfo } from "./trackingfee/_components/FlightInformation";
+import { useState } from "react";
+import { ModalFlightForm } from "./_components/FlightInfoForm";
 
 const Customer: NextPage = () => {
 	const { address: connectedAddress } = useAccount();
+	const [showForm, setShowForm] = useState(false);
 
 	function handleCheckinClick() {
-		// Mock flight information
-		const flightInfo: FlightInfo = {
-			flightNumber: 'XY123',
-			departureTime: '12:00 PM',
-			arrivalTime: '2:00 PM',
-			airports: ['ABC', 'JFK', 'WHATEVER', 'DEF'],
-		};
-		if (typeof window !== 'undefined')
-			window.localStorage.setItem('flightInfoStorage', JSON.stringify(flightInfo));
+		setShowForm(true);
+	}
+
+	function closeModal() {
+		setShowForm(false);
 	}
 
 	// page that will scan the QR code and call the contract to change the state of the contract
 	return (
 		<div>
-			{/* if customer is not connected, that ask to connect
-			if customer is connected, than forward to next page */}
 			<div className="flex items-center flex-col flex-grow pt-10">
 				<div className="px-5">
 					<h1 className="text-center">
@@ -42,14 +39,26 @@ const Customer: NextPage = () => {
 					</div>
 				</div>
 
-				<div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-					{connectedAddress ?
-						<div>
-							<GenericButton text={'Online Checking'} onClick={handleCheckinClick} />
-							<ForwardPageButton innerText={'Subscribe to Tracking'} to={'customer/trackingfee'} />
-						</div> : <ConnectButton />}
+				<div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12 rounded-lg shadow-md">
+					{connectedAddress ? (
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+							<div>
+								<GenericButton text={'Online Checking'} onClick={handleCheckinClick} />
+							</div>
+							<div>
+								<ForwardPageButton innerText={'Subscribe to Tracking'} to={'customer/trackingfee'} />
+							</div>
+							<div>
+								<ForwardPageButton innerText={'Check the Status of your Luggage'} to={'customer/status'} />
+							</div>
+						</div>
+					) : (
+						<ConnectButton />
+					)}
 				</div>
 			</div>
+
+			{showForm && <ModalFlightForm closeModal={closeModal} />}
 		</div>
 	)
 }
