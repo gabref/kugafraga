@@ -1,0 +1,19 @@
+type Token @entity {
+	id: ID!
+	sender: Bytes!
+	# route: [Array!]
+	# symbol: String!
+	# state: String!
+	# location: String!
+	# location: String!
+	# lastModified: BigInt!
+	# createdAt: BigInt!
+}
+
+# type Sender @entity {
+#   id: ID!
+#   address: Bytes!
+#   greetings: [Greeting!] @derivedFrom(field: "sender")
+#   createdAt: BigInt!
+#   greetingCount: BigInt!
+# }

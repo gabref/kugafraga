@@ -132,6 +132,7 @@ const deployedContracts = {
             {
               internalType: "address",
               name: "",
+<<<<<<< HEAD
               type: "address",
             },
           ],
@@ -156,8 +157,29 @@ const deployedContracts = {
             {
               internalType: "address",
               name: "_tokenOwner",
+=======
+>>>>>>> dev
               type: "address",
             },
+          ],
+          name: "checkpoints_dict",
+          outputs: [
+            {
+              internalType: "string",
+              name: "state",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "airportCode",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
             {
               internalType: "string[]",
               name: "_route",
@@ -250,6 +272,65 @@ const deployedContracts = {
         {
           inputs: [
             {
+<<<<<<< HEAD
+=======
+              internalType: "address",
+              name: "_userAddress",
+              type: "address",
+            },
+          ],
+          name: "retrieveSendersTokens",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "string[]",
+                  name: "route",
+                  type: "string[]",
+                },
+                {
+                  internalType: "string",
+                  name: "symbol",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "state",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "location",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "lastModified",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "createdAt",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct TokenData[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+>>>>>>> dev
               internalType: "address",
               name: "_tokenAddress",
               type: "address",
@@ -268,7 +349,11 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     KGFGTokenFactory: {
+<<<<<<< HEAD
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+=======
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+>>>>>>> dev
       abi: [
         {
           inputs: [
@@ -297,25 +382,12 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "deployedTokens",
-          outputs: [
-            {
               internalType: "address",
-              name: "",
+              name: "_user",
               type: "address",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getDeployedTokens",
+          name: "getUserTokens",
           outputs: [
             {
               internalType: "address[]",

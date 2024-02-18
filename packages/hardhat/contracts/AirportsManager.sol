@@ -5,6 +5,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 import "./TrackingToken.sol";
 import "./TokenFactory.sol";
+import "./TokenData.sol";
 
 contract AirportsManager {
 	address public immutable owner;
@@ -67,19 +68,19 @@ contract AirportsManager {
 		return (false);
 	}
 
-	function addAirport(address payable _airportAddress, string memory _airportCode, uint256 _amount, uint256 _percentage) public {
+	function addAirport(address payable _airportAddress, string memory _airportCode, uint256 _amount, uint256 _percentage) external {
 		require (!airportExists(_airportCode), "Duplicate airport");
 		airports_dict[_airportCode] = AirportData(_airportAddress, _amount, _percentage);
 		airports.push(_airportCode);
 		emit AirportAdded(_airportCode);
 	}
 
-	function removeAirport(string memory _airportCode) public {
+	function removeAirport(string memory _airportCode) external {
 		uint256 airportIndex = findAirportIndex(_airportCode);
 		if (airportIndex == airports.length) revert();
 		delete airports_dict[_airportCode];
 		remove(airportIndex);
-		emit AirportAdded(_airportCode);
+		emit AirportRemoved(_airportCode);
 	}
 
 	function findAirportIndex(string memory _airportCode) private view returns (uint256) {
@@ -115,10 +116,10 @@ contract AirportsManager {
 		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
 	}
 
-	function createToken(address _tokenOwner, string[] memory _route) public {
+	function createToken(string[] memory _route) public {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
-		address tokenAddress = factory.createToken(_tokenOwner, _route);
+		address tokenAddress = factory.createToken(msg.sender, _route);
 		uint256 endGas = gasleft();
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
 	}
@@ -154,7 +155,18 @@ contract AirportsManager {
 			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
 		}
 		console.log("Smart contract earned: ", totalDebt);
-	} 
+	}
+
+	function retrieveSendersTokens(address _userAddress) public view returns (TokenData[] memory) {
+		KGFGTokenFactory tokenFactory = KGFGTokenFactory(factoryAddress);
+		address[] memory userTokens = tokenFactory.getUserTokens(_userAddress);
+		TokenData[] memory tokenDetails = new TokenData[](userTokens.length);
+		for (uint256 i = 0; i < userTokens.length; i++) {
+			KGFGTrackingToken temp = KGFGTrackingToken(userTokens[i]);
+			tokenDetails[i] = temp.retrieveTokenData();
+		}
+		return (tokenDetails);
+	}
 
 	receive() external payable {}
 }
