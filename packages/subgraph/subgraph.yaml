@@ -5,22 +5,21 @@ schema:
   file: ./src/schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: YourContract
+    name: AirportsManager
     network: localhost
     source:
-      abi: YourContract
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      abi: AirportsManager
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Greeting
-        - Sender
+        - Token
       abis:
-        - name: YourContract
-          file: ./abis/localhost_YourContract.json
+        - name: AirportsManager
+          file: ./abis/localhost_AirportsManager.json
       eventHandlers:
-        - event: GreetingChange(indexed address,string,bool,uint256)
-          handler: handleGreetingChange
+        - event: TokenCreated(address,address)
+          handler: createToken
       file: ./src/mapping.ts

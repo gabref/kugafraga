@@ -47,6 +47,17 @@ contract AirportsManager {
 		string airportCode
 	);
 
+	event TokenStateUpdated(
+		string _newState,
+		string _location,
+		address _employee
+	);
+
+	event TokenCreated(
+		address _tokenAddress,
+		address _ownerAddress
+	);
+
 	constructor(address _owner, address _factoryAddress) {
 		owner = _owner;
 		factoryAddress = _factoryAddress;
@@ -67,19 +78,19 @@ contract AirportsManager {
 		return (false);
 	}
 
-	function addAirport(address payable _airportAddress, string memory _airportCode, uint256 _amount, uint256 _percentage) public {
+	function addAirport(address payable _airportAddress, string memory _airportCode, uint256 _amount, uint256 _percentage) external {
 		require (!airportExists(_airportCode), "Duplicate airport");
 		airports_dict[_airportCode] = AirportData(_airportAddress, _amount, _percentage);
 		airports.push(_airportCode);
 		emit AirportAdded(_airportCode);
 	}
 
-	function removeAirport(string memory _airportCode) public {
+	function removeAirport(string memory _airportCode) external {
 		uint256 airportIndex = findAirportIndex(_airportCode);
 		if (airportIndex == airports.length) revert();
 		delete airports_dict[_airportCode];
 		remove(airportIndex);
-		emit AirportAdded(_airportCode);
+		emit AirportRemoved(_airportCode);
 	}
 
 	function findAirportIndex(string memory _airportCode) private view returns (uint256) {
@@ -107,20 +118,22 @@ contract AirportsManager {
         return airports;
     }
 
-	function updateTokenState(address _tokenAddress) public {
+	function updateTokenState(address _tokenAddress) external {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		token.updateState(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode);
 		uint256 endGas = gasleft();
 		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
+		emit TokenStateUpdated(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode, msg.sender);
 	}
 
-	function createToken(address _tokenOwner, string[] memory _route) public {
+	function createToken(address _tokenOwner, string[] memory _route) external {
 		uint256 initGas = gasleft();
 		KGFGTokenFactory factory = KGFGTokenFactory(factoryAddress);
 		address tokenAddress = factory.createToken(_tokenOwner, _route);
 		uint256 endGas = gasleft();
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
+		emit TokenCreated(tokenAddress, _tokenOwner);
 	}
 
 	function calculateTotalDebt(address _tokenAddress) private view returns (DebtData memory) {
