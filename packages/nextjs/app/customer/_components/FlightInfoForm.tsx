@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FlightInfo } from '../trackingfee/_components/FlightInformation';
+import { useScaffoldContractRead } from '~~/hooks/scaffold-eth';
 
 export function ModalFlightForm({ closeModal }: { closeModal: () => void }) {
 	return (
@@ -41,7 +42,7 @@ const FlightForm = ({ closeModal }: { closeModal: () => void }) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const isFormValid = () => {
-		return flightNumber !== '' && departureTime !== '' && arrivalTime !== '' && departureAirport !== '' && arrivalAirport !== '';
+		return flightNumber !== '' && departureTime !== '' && arrivalTime !== '';
 	};
 
 	const handleAddTransferAirport = () => {
@@ -51,6 +52,11 @@ const FlightForm = ({ closeModal }: { closeModal: () => void }) => {
 		}
 	};
 
+	const { data: airports } = useScaffoldContractRead({
+		contractName: 'AirportsManager',
+		functionName: 'retrieveAirports',
+		watch: true,
+	});
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -114,38 +120,62 @@ const FlightForm = ({ closeModal }: { closeModal: () => void }) => {
 			</div>
 			<div className="mb-4">
 				<label htmlFor="departureAirport" className="block text-sm font-semibold mb-1">Departure Airport</label>
-				<input
-					type="text"
+				<select
 					id="departureAirport"
 					value={departureAirport}
 					onChange={(e) => setDepartureAirport(e.target.value)}
 					className="input border border-gray-300 rounded-md p-2 w-full"
 					placeholder="Enter departure airport"
-				/>
+				>
+					<option value="" disabled>
+						Select departure airport
+					</option>
+					{airports?.map((airport, index) => (
+						<option key={index} value={airport}>
+							{airport}
+						</option>
+					))}
+				</select>
 			</div>
 			<div className="mb-4">
 				<label htmlFor="arrivalAirport" className="block text-sm font-semibold mb-1">Arrival Airport</label>
-				<input
-					type="text"
-					id="arrivalAirport"
+				<select
+					id="Airport"
 					value={arrivalAirport}
 					onChange={(e) => setArrivalAirport(e.target.value)}
 					className="input border border-gray-300 rounded-md p-2 w-full"
-					placeholder="Enter arrival airport"
-				/>
+					placeholder="Enter arrival aiport"
+				>
+					<option value="" disabled>
+						Select arrival airport
+					</option>
+					{airports?.map((airport, index) => (
+						<option key={index} value={airport}>
+							{airport}
+						</option>
+					))}
+				</select>
 			</div>
 
 			<div className="mb-4">
 				<label htmlFor="transferAirports" className="block text-sm font-semibold mb-1">Transfer Airports</label>
 				<div className="flex items-center">
-					<input
-						type="text"
+					<select
 						id="transferAirports"
 						value={newTransferAirport}
 						onChange={(e) => setNewTransferAirport(e.target.value)}
 						className="input border border-gray-300 rounded-md p-2 w-full"
 						placeholder="Enter transfer airport"
-					/>
+					>
+						<option value="" disabled>
+							Select additional airport
+						</option>
+						{airports?.map((airport, index) => (
+							<option key={index} value={airport}>
+								{airport}
+							</option>
+						))}
+					</select>
 					<button
 						type="button"
 						onClick={handleAddTransferAirport}
