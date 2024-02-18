@@ -5,6 +5,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 import "./TrackingToken.sol";
 import "./TokenFactory.sol";
+import "./TokenData.sol";
 
 contract AirportsManager {
 	address public immutable owner;
@@ -156,15 +157,15 @@ contract AirportsManager {
 		console.log("Smart contract earned: ", totalDebt);
 	}
 
-	function retrieveSendersTokens() public view returns (address[] memory) {
+	function retrieveSendersTokens(address _userAddress) public view returns (TokenData[] memory) {
 		KGFGTokenFactory tokenFactory = KGFGTokenFactory(factoryAddress);
-		address[] memory userTokens = tokenFactory.getUserTokens(msg.sender);
-		return (userTokens);
-	}
-	
-	function getTokenData(address _tokenAddress) public view returns (address, string memory, string memory, string memory, uint, uint) {
-		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
-		return (token.retrieveTokenData());
+		address[] memory userTokens = tokenFactory.getUserTokens(_userAddress);
+		TokenData[] memory tokenDetails = new TokenData[](userTokens.length);
+		for (uint256 i = 0; i < userTokens.length; i++) {
+			KGFGTrackingToken temp = KGFGTrackingToken(userTokens[i]);
+			tokenDetails[i] = temp.retrieveTokenData();
+		}
+		return (tokenDetails);
 	}
 
 	receive() external payable {}

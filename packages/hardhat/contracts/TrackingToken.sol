@@ -2,6 +2,7 @@
 pragma solidity >=0.8.2 <0.9.0;
 
 import "hardhat/console.sol";
+import "./TokenData.sol";
 
 contract KGFGTrackingToken {
     address public				owner;
@@ -36,8 +37,6 @@ contract KGFGTrackingToken {
 		createdAt = block.timestamp;
 		lastModified = createdAt;
 		console.log("[*] Token deployed");
-
-		emit TokenCreated(address(this), _owner, symbol, state, location, lastModified, createdAt);
     }
 
 	function updateState(string memory _newState, string memory _location) external {
@@ -66,7 +65,8 @@ contract KGFGTrackingToken {
 		return (route);
 	}
 	
-	function retrieveTokenData() public view returns (address, string memory, string memory, string memory, uint, uint) {
-		return (owner, symbol, state, location, lastModified, createdAt);
+	function retrieveTokenData() public view returns (TokenData memory) {
+		TokenData memory td = TokenData(owner, route, symbol, state, location, lastModified, createdAt);
+		return (td);
 	}
 }
