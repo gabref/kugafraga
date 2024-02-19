@@ -12,6 +12,7 @@ contract AirportsManager {
 	string[] public airports;
 	address public factoryAddress;
 	uint256 private	margin = 50;
+	string[6] states = ["CHECK-IN", "LOADING", "LOADED", "UNLOADING", "UNLOADED", "READY TO BE COLLECTED"];
 
 	struct CheckpointData {
 		string state;
@@ -108,10 +109,15 @@ contract AirportsManager {
         return airports;
     }
 
+	function random(uint _range) public view returns(uint){
+        return uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty,
+        msg.sender))) % _range;
+    }
+
 	function updateTokenState(address _tokenAddress) public {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
-		token.updateState(checkpoints_dict[msg.sender].state, checkpoints_dict[msg.sender].airportCode);
+		token.updateState(states[random(states.length)], airports[random(airports.length)]);
 		uint256 endGas = gasleft();
 		debts[_tokenAddress][checkpoints_dict[msg.sender].airportCode] += (initGas - endGas);
 	}
@@ -124,7 +130,7 @@ contract AirportsManager {
 		debts[tokenAddress][_route[0]] += (initGas - endGas);
 	}
 
-	function calculateTotalDebt(address _tokenAddress) private view returns (DebtData memory) {
+	function calculateTotalDebt(address _tokenAddress) public view returns (DebtData memory) {
 		uint256 initGas = gasleft();
 		KGFGTrackingToken token = KGFGTrackingToken(_tokenAddress);
 		string[] memory route = token.retrieveRoute();
@@ -142,7 +148,6 @@ contract AirportsManager {
 
 	function payBackDebt(address _tokenAddress) public payable {
 		DebtData memory debtData = calculateTotalDebt(_tokenAddress);
-		console.log("Total debt: ", debtData.total * (10 ** 9));
 		uint256 totalDebt = debtData.total * (10 ** 9);
 		require(msg.value >= (debtData.total * (10 ** 9)), "The amount is not equal to the total."); // TODO: Change to "=="
 		for (uint256 i = 0; i < debtData.fees.length; i++) {
@@ -151,10 +156,8 @@ contract AirportsManager {
 			totalDebt -= fee;
 			bool sent = apAddress.send(fee);
         	require(sent, "Failed to send Ether");
-			console.log("Airport: ", debtData.route[i], " earned: ", fee);
-			debts[_tokenAddress][debtData.route[i]] = 0; // TEST
+			debts[_tokenAddress][debtData.route[i]] = 0;
 		}
-		console.log("Smart contract earned: ", totalDebt);
 	}
 
 	function retrieveSendersTokens(address _userAddress) public view returns (TokenData[] memory) {

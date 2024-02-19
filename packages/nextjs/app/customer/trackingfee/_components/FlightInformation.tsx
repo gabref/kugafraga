@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { AcceptFee } from "./AcceptFee";
-import { GenericButton } from "~~/components/GenericButton";
 
 export type FlightInfo = {
 	flightNumber: string;
@@ -24,12 +23,6 @@ export const FlightInformation = () => {
 		return null;
 	}
 
-	function deleteFlightInfoFromStorage() {
-		if (typeof window !== 'undefined') {
-			window.localStorage.removeItem('flightInfoStorage');
-		}
-	}
-
 	useEffect(() => {
 		const flightInfo = getFlightInfoFromStorage();
 		if (!flightInfo) return;
@@ -38,11 +31,10 @@ export const FlightInformation = () => {
 
 	// Mock fee expectations
 	const feeExpectations = [
-		{ description: 'Luggage Fee', amount: '$20' },
-		{ description: 'Seat Selection Fee', amount: '$10' },
-		{ description: 'In-flight Meal Fee', amount: '$15' },
+		{ description: 'Luggage Fee', amount: '$2' },
+		{ description: 'Transfers Fees', amount: '$6' },
+		{ description: 'Track My Baggage Fee', amount: '$5' },
 	];
-
 
 	// Calculate total fee
 	const totalFee = feeExpectations.reduce((total, fee) => total + parseFloat(fee.amount.slice(1)), 0);
@@ -79,9 +71,6 @@ export const FlightInformation = () => {
 						</ul>
 						<p className="font-semibold" key='total-fee'>Total Fee: ${totalFee.toFixed(2)}</p>
 						<AcceptFee airports={flightInfo.airports} />
-						<GenericButton
-							text="Delete Flight Info - This is just for debug purposes, delete later"
-							onClick={deleteFlightInfoFromStorage} />
 					</div>
 				</div>
 			) : (<p key='no-info'>No flight information found</p>)}

@@ -40,19 +40,19 @@ module.exports = {
       },
       {
         dark: {
-          primary: "#212638",
+          primary: "#001e38",
           "primary-content": "#F9FBFF",
           secondary: "#323f61",
           "secondary-content": "#F9FBFF",
           accent: "#4969A6",
           "accent-content": "#F9FBFF",
-          neutral: "#F9FBFF",
-          "neutral-content": "#385183",
-          "base-100": "#385183",
+          neutral: "#001e38",
+          "neutral-content": "#001e38",
+          "base-100": "#001e38",
           "base-200": "#2A3655",
           "base-300": "#212638",
           "base-content": "#F9FBFF",
-          info: "#385183",
+          info: "#001e38",
           success: "#34EEB6",
           warning: "#FFCF72",
           error: "#FF8863",
@@ -75,12 +75,15 @@ module.exports = {
   },
   theme: {
     extend: {
-      boxShadow: {
-        center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
-      },
-      animation: {
-        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-    },
+		fontFamily: {
+			custom: ['CustomFont', 'Helvetica']
+		},
+		boxShadow: {
+			center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
+		},
+		animation: {
+			"pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+		},
+	},
   },
 };

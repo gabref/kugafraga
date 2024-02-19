@@ -66,7 +66,7 @@ contract KGFGTrackingToken {
 	}
 	
 	function retrieveTokenData() public view returns (TokenData memory) {
-		TokenData memory td = TokenData(owner, route, symbol, state, location, lastModified, createdAt);
+		TokenData memory td = TokenData(address(this), owner, route, symbol, state, location, lastModified, createdAt);
 		return (td);
 	}
 }
